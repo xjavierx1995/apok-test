@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, from, lastValueFrom, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
+import { catchError, exhaustMap, filter, from, lastValueFrom, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { NodeService } from 'src/app/services/node.service';
 import * as NodeActions from './node.action'; 
 import * as LocaleActions from '../locale/locale.action'; 
@@ -14,11 +14,29 @@ import { getSelectedParentId } from './node.selector';
 export class NodeEffects {
 
   loadParentNodes$ = createEffect((): any => this.actions$.pipe(
-    ofType(NodeActions.loadParentNodesList),
-    exhaustMap((g) => this.nodeService.getParentNodes().pipe(
-      map((nodes: Node[]) => NodeActions.setNodesList({ nodes })),
-      catchError((error) => of(NodeActions.loadNodesListError({ error }))),
-    )),
+    ofType(
+      NodeActions.loadParentNodesList,
+      LocaleActions.setSelectedLocale
+    ),
+    withLatestFrom(this.store.select(getSelectedLocale)),
+    switchMap(([g, locale]) => 
+      this.nodeService.getParentNodes().pipe(
+        mergeMap((nodes: Node[]) => 
+          from(Promise.all(nodes.slice(0, 15).map(async (node) => {
+                const res = await lastValueFrom(this.nodeService.getNode(node.id, locale.locale));
+                return {
+                  id: res.id,
+                  parent: res.parent,
+                  title: res.translation.find(t => t.locale === locale.locale)?.title ?? res.title
+                };
+              })
+            )
+          )
+        ),
+        map((translatedNodes) => NodeActions.setNodesList({ nodes: translatedNodes })),
+        catchError((error) => of(NodeActions.loadNodesListError({ error })))
+      )
+    )
   ));
 
   loadNode$ = createEffect((): any => this.actions$.pipe(
@@ -30,6 +48,7 @@ export class NodeEffects {
       this.store.select(getSelectedLocale), 
       this.store.select(getSelectedParentId)
     ),
+    filter(([action, locale, parentId]) => !!parentId),
     exhaustMap(([g, locale, parentId]) => this.nodeService.getNode(parentId, locale.locale).pipe(
       map((node: Node) => NodeActions.setSelectedNode({ node })),
       catchError((error) => of(NodeActions.loadNodesListError({ error }))),
@@ -45,6 +64,7 @@ export class NodeEffects {
       this.store.select(getSelectedLocale), 
       this.store.select(getSelectedParentId)
     ),
+    filter(([action, locale, parentId]) => !!parentId),
     switchMap(([action, locale, parentId]) => 
       this.nodeService.getChildrenNodes(parentId).pipe(
         mergeMap((nodes: Node[]) => 
