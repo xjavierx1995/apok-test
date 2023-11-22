@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { Node } from '../store/node/node.state';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class NodeService {
   constructor(private http: HttpClient) { }
 
   getParentNodes() {
-    return this.http.get(`${environment.apiUrl}/nodes`);
+    return this.http.get<Node[]>(`${environment.apiUrl}/nodes?locale=es_ES`);
+      
   }
 
   getChildNodes(parent: number) {
