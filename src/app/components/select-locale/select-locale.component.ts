@@ -9,14 +9,25 @@ import { Ilocale } from 'src/app/store/locale/locale.state';
 
 @Component({
   selector: 'app-select-locale',
-  templateUrl: './select-locale.component.html',
-  styleUrls: ['./select-locale.component.css'],
+  styleUrls: ['./select-locale.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     IonicModule,
     FormsModule
   ],
+  template: `
+    <ion-list>
+      <ion-item>
+        <ion-select [compareWith]="compareWith" [(ngModel)]="selectedLocale" 
+          (ionChange)="selectLocale()">
+          <ion-select-option *ngFor="let item of localeList" [value]="item">
+            {{ item.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  `
 })
 export class SelectLocaleComponent  implements OnInit {
 
