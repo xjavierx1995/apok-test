@@ -34,7 +34,10 @@
             "prefix": "app",
             "style": "camelCase"
           }
-        ]
+        ],
+        "semi": ["error", "always"],
+        "quotes": ["error", "single"],
+        "object-curly-spacing": ["error", "always", { "objectsInObjects": true }]
       }
     },
     {
