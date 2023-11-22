@@ -5,6 +5,9 @@
     </ion-buttons>
     <ion-title>Nodos hijos de: {{ selectedParentNode?.translation[0]?.title ?? selectedParentNode?.title }}</ion-title>
     <ion-buttons slot="end">
+      <app-create-node-modal></app-create-node-modal>
+    </ion-buttons>
+    <ion-buttons slot="end">
       <app-select-locale></app-select-locale>
     </ion-buttons>
   </ion-toolbar>

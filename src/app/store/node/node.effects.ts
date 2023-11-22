@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, filter, from, lastValueFrom, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { NodeService } from 'src/app/services/node.service';
-import * as NodeActions from './node.action'; 
-import * as LocaleActions from '../locale/locale.action'; 
+import * as NodeActions from './node.action';
+import * as LocaleActions from '../locale/locale.action';
 import { Node } from './node.state';
 import { ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
@@ -19,18 +19,18 @@ export class NodeEffects {
       LocaleActions.setSelectedLocale
     ),
     withLatestFrom(this.store.select(getSelectedLocale)),
-    switchMap(([g, locale]) => 
+    switchMap(([g, locale]) =>
       this.nodeService.getParentNodes().pipe(
-        mergeMap((nodes: Node[]) => 
+        mergeMap((nodes: Node[]) =>
           from(Promise.all(nodes.slice(0, 15).map(async (node) => {
-                const res = await lastValueFrom(this.nodeService.getNode(node.id, locale.locale));
-                return {
-                  id: res.id,
-                  parent: res.parent,
-                  title: res.translation.find(t => t.locale === locale.locale)?.title ?? res.title
-                };
-              })
-            )
+            const res = await lastValueFrom(this.nodeService.getNode(node.id, locale.locale));
+            return {
+              id: res.id,
+              parent: res.parent,
+              title: res.translation.find(t => t.locale === locale.locale)?.title ?? res.title
+            };
+          })
+          )
           )
         ),
         map((translatedNodes) => NodeActions.setNodesList({ nodes: translatedNodes })),
@@ -41,11 +41,11 @@ export class NodeEffects {
 
   loadNode$ = createEffect((): any => this.actions$.pipe(
     ofType(
-      NodeActions.setSelectedParentId, 
+      NodeActions.setSelectedParentId,
       LocaleActions.setSelectedLocale
     ),
     withLatestFrom(
-      this.store.select(getSelectedLocale), 
+      this.store.select(getSelectedLocale),
       this.store.select(getSelectedParentId)
     ),
     filter(([action, locale, parentId]) => !!parentId),
@@ -58,25 +58,26 @@ export class NodeEffects {
   loadChlidrenNodes$ = createEffect(() => this.actions$.pipe(
     ofType(
       NodeActions.loadNodesList,
-      LocaleActions.setSelectedLocale
+      NodeActions.createNodeResult,
+      LocaleActions.setSelectedLocale,
     ),
     withLatestFrom(
-      this.store.select(getSelectedLocale), 
+      this.store.select(getSelectedLocale),
       this.store.select(getSelectedParentId)
     ),
     filter(([action, locale, parentId]) => !!parentId),
-    switchMap(([action, locale, parentId]) => 
+    switchMap(([action, locale, parentId]) =>
       this.nodeService.getChildrenNodes(parentId).pipe(
-        mergeMap((nodes: Node[]) => 
+        mergeMap((nodes: Node[]) =>
           from(Promise.all(nodes.slice(0, 15).map(async (node) => {
-                const res = await lastValueFrom(this.nodeService.getNode(node.id, locale.locale));
-                return {
-                  id: res.id,
-                  parent: res.parent,
-                  title: res.translation.find(t => t.locale === locale.locale)?.title ?? res.title
-                };
-              })
-            )
+            const res = await lastValueFrom(this.nodeService.getNode(node.id, locale.locale));
+            return {
+              id: res.id,
+              parent: res.parent,
+              title: res.translation.find(t => t.locale === locale.locale)?.title ?? res.title
+            };
+          })
+          )
           )
         ),
         map((translatedNodes) => NodeActions.setNodesList({ nodes: translatedNodes })),
@@ -84,7 +85,7 @@ export class NodeEffects {
       )
     )
   ));
-  
+
 
   getPrivateGroupDetailOk$ = createEffect((): any => this.actions$.pipe(
     ofType(NodeActions.loadNodesListError),
@@ -101,6 +102,38 @@ export class NodeEffects {
         duration: 5000,
         position: 'bottom',
         color: 'danger',
+        buttons: [{ role: 'close', icon: 'close' }]
+      });
+      await toast.present();
+    }),
+  ), { dispatch: false });
+
+  createNode$ = createEffect((): any => this.actions$.pipe(
+    ofType(
+      NodeActions.createNode
+    ),
+    withLatestFrom(this.store.select(getSelectedParentId)),
+    filter(([action, parentId]) => !!parentId),
+    exhaustMap(([g, parentId]) => this.nodeService.createNode(parentId, g.locales).pipe(
+      map((node: Node) => NodeActions.createNodeResult({ success: true })),
+      catchError((error) => of(NodeActions.createNodeResult({ success: false }))),
+    )),
+  ));
+
+  createNodeResult$ = createEffect((): any => this.actions$.pipe(
+    ofType(NodeActions.createNodeResult),
+    map(async (g) => {
+      let message = 'El nodo hijo ha sido creado satisfactoriamente';
+      let color = 'success';
+      if (!g.success) {
+        message = 'Ha ocurrido un error al creal el nodo';
+        color = 'danger';
+      }
+      const toast = await this.toastController.create({
+        message: message,
+        duration: 5000,
+        position: 'bottom',
+        color: color,
         buttons: [{ role: 'close', icon: 'close' }]
       });
       await toast.present();

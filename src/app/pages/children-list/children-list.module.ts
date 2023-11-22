@@ -8,6 +8,7 @@ import { ChildrenListPageRoutingModule } from './children-list-routing.module';
 
 import { ChildrenListPage } from './children-list.page';
 import { SelectLocaleComponent } from 'src/app/components/select-locale/select-locale.component';
+import { CreateNodeModalComponent } from 'src/app/components/create-node-modal/create-node-modal.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { SelectLocaleComponent } from 'src/app/components/select-locale/select-l
     FormsModule,
     IonicModule,
     ChildrenListPageRoutingModule,
-    SelectLocaleComponent
+    SelectLocaleComponent,
+    CreateNodeModalComponent
   ],
   declarations: [ChildrenListPage]
 })

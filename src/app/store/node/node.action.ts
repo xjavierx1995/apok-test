@@ -7,3 +7,5 @@ export const loadNodesListError = createAction('[Nodes] Load nodes list Error', 
 export const setSelectedParentId = createAction('[Nodes] Set Selected Parent Id', props<{ id: string }>());
 export const setSelectedNode = createAction('[Nodes] Set Selected Node', props<{ node: Node }>());
 export const setNodesList = createAction('[Nodes] Set nodes list', props<{ nodes: Node[] }>());
+export const createNode = createAction('[Nodes] Create node', props<{ locales: string[] }>());
+export const createNodeResult = createAction('[Nodes] Create node Result', props<{ success: boolean }>());

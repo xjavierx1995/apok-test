@@ -28,8 +28,8 @@ export class NodeService {
     return this.http.get<Ilocale[]>(`${environment.apiUrl}/locales`);
   }
 
-  createNode(parent: number, locales: string[]) {
-    return this.http.post(`${environment.apiUrl}/node`, { parent, locales });
+  createNode(parentId: string, locales: string[]): Observable<Node> {
+    return this.http.post<Node>(`${environment.apiUrl}/node`, { parent: parentId, locales });
   }
 
   deleteNode(nodeId: number) {
