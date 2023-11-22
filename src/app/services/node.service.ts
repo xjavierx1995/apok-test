@@ -20,8 +20,8 @@ export class NodeService {
     return this.http.get<Node[]>(`${environment.apiUrl}/nodes?parent=${parentId}`);
   }
 
-  getNode(nodeId: number, locale: string) {
-    return this.http.get(`${environment.apiUrl}/nodes/${nodeId}?locale=${locale}`);
+  getNode(nodeId: string, locale: string): Observable<Node> {
+    return this.http.get<Node>(`${environment.apiUrl}/node/${nodeId}?locale=${locale}`);
   }
 
   getLocales(): Observable<Ilocale[]> {

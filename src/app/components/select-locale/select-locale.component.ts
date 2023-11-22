@@ -28,9 +28,7 @@ export class SelectLocaleComponent  implements OnInit {
   ngOnInit() {
     this.store.select('locale').subscribe( locale => {
       this.selectedLocale = locale.selectedLocale;
-      this.localeList = locale.localeList;
-      console.log(this.selectedLocale);
-      
+      this.localeList = locale.localeList;      
     });
   }
 

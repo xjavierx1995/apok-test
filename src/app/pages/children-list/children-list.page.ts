@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NodeService } from 'src/app/services/node.service';
 import { AppState } from 'src/app/store/app.state';
-import { loadNodesList, setNodesList } from 'src/app/store/node/node.action';
+import { loadNodesList, setNodesList, setSelectedParentId } from 'src/app/store/node/node.action';
 import { Node } from 'src/app/store/node/node.state';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -37,11 +37,12 @@ export class ChildrenListPage implements OnInit, OnDestroy {
 
   ionViewWillEnter(){
     const parentId = this.activeRoute.snapshot.paramMap.get('parentId');
-    this.getChildrenNodes(parentId);
+    this.store.dispatch(setSelectedParentId({ id: parentId }));
+    this.getChildrenNodes();
   }
 
-  async getChildrenNodes(parentNodeId: string) {
-    this.store.dispatch(loadNodesList({ parentId: parentNodeId }));
+  async getChildrenNodes() {
+    this.store.dispatch(loadNodesList());
   }
 
   async showChildren(parentNodeId: string) {
