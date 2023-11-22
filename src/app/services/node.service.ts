@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Node } from '../store/node/node.state';
 import { Observable } from 'rxjs';
+import { Ilocale } from '../store/locale/locale.state';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,8 +24,8 @@ export class NodeService {
     return this.http.get(`${environment.apiUrl}/nodes/${nodeId}?locale=${locale}`);
   }
 
-  getLocales() {
-    return this.http.get(`${environment.apiUrl}/locales`);
+  getLocales(): Observable<Ilocale[]> {
+    return this.http.get<Ilocale[]>(`${environment.apiUrl}/locales`);
   }
 
   createNode(parent: number, locales: string[]) {
