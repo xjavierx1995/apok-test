@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NodeService } from 'src/app/services/node.service';
 import { AppState } from 'src/app/store/app.state';
@@ -7,30 +7,34 @@ import { setNodesList } from 'src/app/store/node/node.action';
 import { Node } from 'src/app/store/node/node.state';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-children-list',
+  templateUrl: './children-list.page.html',
+  styleUrls: ['./children-list.page.scss'],
 })
-export class HomePage {
+export class ChildrenListPage {
 
-  public parentNodes: Node[];
+  public nodeList: Node[];
 
   constructor(
-    private store: Store<AppState>,
-    private nodeService: NodeService,
+    private activeRoute: ActivatedRoute,
     private router: Router,
+    private nodeService: NodeService,
+    private store: Store<AppState>,
   ) { }
 
   ionViewWillEnter(){
-    this.getParentNodes();
+    this.getChildrenNodes();
 
     this.store.subscribe( ({ node }) => {
-      this.parentNodes = node.nodesList;
+      this.nodeList = node.nodesList;
     });
   }
 
-  getParentNodes(): void {
-    this.nodeService.getParentNodes().subscribe(nodes => {
+  async getChildrenNodes() {
+    const parentId = this.activeRoute.snapshot.paramMap.get('parentId');
+    console.log(parentId);
+    
+    this.nodeService.getChildrenNodes(parentId).subscribe(nodes => {
       this.store.dispatch(setNodesList({ nodes }));
     });
   }
@@ -38,5 +42,4 @@ export class HomePage {
   async showChildren(parentNodeId: number) {
     await this.router.navigate(['/children-list', parentNodeId]);
   }
-
 }

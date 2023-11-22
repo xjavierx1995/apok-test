@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" ></ion-back-button>
+    </ion-buttons>
+    <ion-title>childrenList</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <p>maybe a breatcumb?</p>
+  <ion-list>
+    @for (item of nodeList; track item.id) { 
+      <ion-item button (click)="showChildren(item.id)">
+        <ion-label>{{ item.title }}</ion-label>
+      </ion-item>
+    }
+  </ion-list>
+</ion-content>

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Node } from '../store/node/node.state';
-
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,13 +10,13 @@ export class NodeService {
 
   constructor(private http: HttpClient) { }
 
-  getParentNodes() {
-    return this.http.get<Node[]>(`${environment.apiUrl}/nodes?locale=es_ES`);
+  getParentNodes(): Observable<Node[]> {
+    return this.http.get<Node[]>(`${environment.apiUrl}/nodes`);
       
   }
 
-  getChildNodes(parent: number) {
-    return this.http.get(`${environment.apiUrl}/nodes?parent=${parent}`);
+  getChildrenNodes(parentId: string): Observable<Node[]> {
+    return this.http.get<Node[]>(`${environment.apiUrl}/nodes?parent=${parentId}`);
   }
 
   getNode(nodeId: number, locale: string) {

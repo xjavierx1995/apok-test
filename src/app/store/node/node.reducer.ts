@@ -1,14 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
-import { setParentNodes } from './node.action';
+import * as NodeActions from './node.action';
 import { NodeState } from './node.state';
 
 export const initialState: NodeState = {
-   parentNodes: undefined,
-   selectedNode: undefined
+   nodesList: undefined,
+  //  selectedNode: undefined
 };
 
 export const nodeReducer = createReducer(initialState,
 
-  on(setParentNodes, (state, action) => ({ ...state, parentNodes: action.nodes })),
+  on(NodeActions.setNodesList, (state, action) => ({ ...state, nodesList: action.nodes })),
+  // on(NodeActions.setSelectedNode, (state, action) => ({ ...state, selectedNode: action.node })),
 
 );

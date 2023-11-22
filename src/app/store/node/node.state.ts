@@ -1,6 +1,6 @@
 export interface NodeState {
-  parentNodes: Node[];
-  selectedNode: Node
+  nodesList: Node[];
+  // selectedNode: Node
 }
 
 export interface Node {

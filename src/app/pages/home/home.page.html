@@ -10,7 +10,7 @@
   
   <ion-list>
     @for (item of parentNodes; track item.id) { 
-      <ion-item button>
+      <ion-item button (click)="showChildren(item.id)">
         <ion-label>{{ item.title }}</ion-label>
       </ion-item>
     }
