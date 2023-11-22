@@ -1,0 +1,7 @@
+<ion-list>
+  <ion-item>
+    <ion-select [compareWith]="compareWith" [(ngModel)]="selectedLocale" (ionChange)="selectLocale()">
+      <ion-select-option *ngFor="let item of localeList" [value]="item">{{ item.label }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+</ion-list>

@@ -24,7 +24,7 @@ export class HomePage {
 
   ionViewWillEnter(){
     this.store.dispatch(loadParentNodesList());
-    this.store.pipe(takeUntil(this.unsubscribe$)).subscribe( ({ node }) => {
+    this.store.select('node').pipe(takeUntil(this.unsubscribe$)).subscribe( node  => {
       this.parentNodes = node.nodesList;
     });
   }

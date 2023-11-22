@@ -25,7 +25,7 @@ export class ChildrenListPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.store.pipe(takeUntil(this.unsubscribe$)).subscribe( ({ node }) => {
+    this.store.select('node').pipe(takeUntil(this.unsubscribe$)).subscribe( node => {
       this.nodeList = node.nodesList;
     });
   }
