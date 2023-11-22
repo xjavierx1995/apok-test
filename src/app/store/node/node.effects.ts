@@ -65,7 +65,12 @@ export class NodeEffects {
       this.store.select(getSelectedLocale),
       this.store.select(getSelectedParentId)
     ),
-    filter(([action, locale, parentId]) => !!parentId),
+    filter(([action, locale, parentId]) => {
+      if (action.type === NodeActions.createNodeResult.type) {
+        return !!parentId && action.success;
+      }
+      return !!parentId;
+    }),
     switchMap(([action, locale, parentId]) =>
       this.nodeService.getChildrenNodes(parentId).pipe(
         mergeMap((nodes: Node[]) =>
@@ -127,6 +132,34 @@ export class NodeEffects {
       let color = 'success';
       if (!g.success) {
         message = 'Ha ocurrido un error al creal el nodo';
+        color = 'danger';
+      }
+      const toast = await this.toastController.create({
+        message: message,
+        duration: 5000,
+        position: 'bottom',
+        color: color,
+        buttons: [{ role: 'close', icon: 'close' }]
+      });
+      await toast.present();
+    }),
+  ), { dispatch: false });
+
+  deleteNode$ = createEffect((): any => this.actions$.pipe(
+    ofType(NodeActions.deleteNode),
+    exhaustMap((g) => this.nodeService.deleteNode(g.nodeId).pipe(
+      map((node: Node) => NodeActions.deleteNodeResult({ success: true, nodeId: g.nodeId })),
+      catchError((error) => of(NodeActions.deleteNodeResult({ success: false, error }))),
+    )),
+  ));
+
+  deleteNodeResult$ = createEffect((): any => this.actions$.pipe(
+    ofType(NodeActions.deleteNodeResult),
+    map(async (g) => {
+      let message = 'Se ha eliminado el nodo satisfactoriamente';
+      let color = 'success';
+      if (!g.success) {
+        message = 'No se puede eliminar un nodo que contenga hijos';
         color = 'danger';
       }
       const toast = await this.toastController.create({

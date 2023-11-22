@@ -32,7 +32,7 @@ export class NodeService {
     return this.http.post<Node>(`${environment.apiUrl}/node`, { parent: parentId, locales });
   }
 
-  deleteNode(nodeId: number) {
-    return this.http.delete(`${environment.apiUrl}/node/${nodeId}`);
+  deleteNode(nodeId: string): Observable<Node> {
+    return this.http.delete<Node>(`${environment.apiUrl}/node/${nodeId}`);
   }
 }

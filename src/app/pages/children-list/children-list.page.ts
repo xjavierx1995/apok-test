@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NodeService } from 'src/app/services/node.service';
 import { AppState } from 'src/app/store/app.state';
-import { loadNodesList, setSelectedParentId } from 'src/app/store/node/node.action';
+import { deleteNode, loadNodesList, setSelectedParentId } from 'src/app/store/node/node.action';
 import { Node } from 'src/app/store/node/node.state';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -49,5 +49,9 @@ export class ChildrenListPage implements OnInit, OnDestroy {
 
   async showChildren(parentNodeId: string) {
     this.router.navigate(['/children-list', parentNodeId]);
+  }
+
+  startDelete(nodeId: string) {
+    this.store.dispatch(deleteNode({ nodeId }));
   }
 }
