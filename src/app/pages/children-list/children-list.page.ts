@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NodeService } from 'src/app/services/node.service';
 import { AppState } from 'src/app/store/app.state';
-import { loadNodesList, setNodesList, setSelectedParentId } from 'src/app/store/node/node.action';
+import { loadNodesList, setSelectedParentId } from 'src/app/store/node/node.action';
 import { Node } from 'src/app/store/node/node.state';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import { takeUntil } from 'rxjs/operators';
 export class ChildrenListPage implements OnInit, OnDestroy {
 
   public nodeList: Node[];
+  public selectedParentNode: Node;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -27,6 +28,7 @@ export class ChildrenListPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.select('node').pipe(takeUntil(this.unsubscribe$)).subscribe( node => {
       this.nodeList = node.nodesList;
+      this.selectedParentNode = node.selectedNode;
     });
   }
 

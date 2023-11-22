@@ -1,17 +1,16 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home" ></ion-back-button>
     </ion-buttons>
-    <ion-title>Nodos hijos</ion-title>
+    <ion-title>Nodos hijos de: {{ selectedParentNode?.translation[0]?.title ?? selectedParentNode?.title }}</ion-title>
     <ion-buttons slot="end">
       <app-select-locale></app-select-locale>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <p>maybe a breatcumb?</p>
+<ion-content>
   <ion-list>
     @for (item of nodeList; track item.id) { 
       <ion-item button (click)="showChildren(item.id)">

@@ -21,6 +21,21 @@ export class NodeEffects {
     )),
   ));
 
+  loadNode$ = createEffect((): any => this.actions$.pipe(
+    ofType(
+      NodeActions.setSelectedParentId, 
+      LocaleActions.setSelectedLocale
+    ),
+    withLatestFrom(
+      this.store.select(getSelectedLocale), 
+      this.store.select(getSelectedParentId)
+    ),
+    exhaustMap(([g, locale, parentId]) => this.nodeService.getNode(parentId, locale.locale).pipe(
+      map((node: Node) => NodeActions.setSelectedNode({ node })),
+      catchError((error) => of(NodeActions.loadNodesListError({ error }))),
+    )),
+  ));
+
   loadChlidrenNodes$ = createEffect(() => this.actions$.pipe(
     ofType(
       NodeActions.loadNodesList,

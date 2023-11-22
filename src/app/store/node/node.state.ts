@@ -1,6 +1,7 @@
 export interface NodeState {
   nodesList: Node[];
   selectedParentId: string;
+  selectedNode: Node;
 }
 
 export interface Node {
