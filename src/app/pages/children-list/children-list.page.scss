@@ -1,0 +1,15 @@
+ion-list {
+  @media screen and (min-width: 600px) {
+    max-width: 70%;
+    margin: auto;
+  }
+}
+
+.btn-create {
+  text-align: right;
+  margin-bottom: 16px;
+  @media screen and (min-width: 600px) {
+    max-width: 70%;
+    margin: auto;
+  }
+}

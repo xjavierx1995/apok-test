@@ -9,6 +9,7 @@ import { ToastController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { getSelectedLocale } from '../locale/locale.selector';
 import { getSelectedParentId } from './node.selector';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class NodeEffects {
@@ -100,7 +101,8 @@ export class NodeEffects {
         message = 'El nodo no posee hijos';
       }
       if (e.error.status === 429) {
-        message = 'Ha ocurrido un error al consultar las traducciones';
+        await this.router.navigate(['/home']);
+        message = 'Ha ocurrido un error, se ha excedido el limite de peticiones.';
       }
       const toast = await this.toastController.create({
         message: message,
@@ -175,6 +177,7 @@ export class NodeEffects {
 
   constructor(
     private store: Store,
+    private router: Router,
     private actions$: Actions,
     private nodeService: NodeService,
     private toastController: ToastController,

@@ -5,21 +5,25 @@
     </ion-buttons>
     <ion-title>Nodos hijos de: {{ selectedParentNode?.translation[0]?.title ?? selectedParentNode?.title }}</ion-title>
     <ion-buttons slot="end">
-      <app-create-node-modal></app-create-node-modal>
-    </ion-buttons>
-    <ion-buttons slot="end">
       <app-select-locale></app-select-locale>
     </ion-buttons>
+    <ion-progress-bar *ngIf="isLoading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   @if (isLoading) {
-    <h1>cargando</h1>
-  } @else if (!isLoading && !nodeList) {
-    <h1> No hay datos </h1>
+    <app-loading></app-loading>
+  } @else if (!isLoading && (!nodeList || nodeList.length === 0)) {
+    <div class="btn-create">
+      <app-create-node-modal></app-create-node-modal>
+    </div>
+    <app-no-data></app-no-data>
   } @else {  
-    <ion-list>
+    <div class="btn-create">
+      <app-create-node-modal></app-create-node-modal>
+    </div>
+    <ion-list>  
       @for (item of nodeList; track item.id) { 
         <ion-item>
           <ion-label>{{ item.title }}</ion-label>

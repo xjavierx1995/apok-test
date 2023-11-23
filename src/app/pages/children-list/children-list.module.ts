@@ -9,6 +9,8 @@ import { ChildrenListPageRoutingModule } from './children-list-routing.module';
 import { ChildrenListPage } from './children-list.page';
 import { SelectLocaleComponent } from 'src/app/components/select-locale/select-locale.component';
 import { CreateNodeModalComponent } from 'src/app/components/create-node-modal/create-node-modal.component';
+import { LoadingComponent } from 'src/app/components/loading/loading.component';
+import { NoDataComponent } from 'src/app/components/no-data/no-data.component';
 
 @NgModule({
   imports: [
@@ -17,7 +19,9 @@ import { CreateNodeModalComponent } from 'src/app/components/create-node-modal/c
     IonicModule,
     ChildrenListPageRoutingModule,
     SelectLocaleComponent,
-    CreateNodeModalComponent
+    CreateNodeModalComponent,
+    LoadingComponent,
+    NoDataComponent
   ],
   declarations: [ChildrenListPage]
 })
