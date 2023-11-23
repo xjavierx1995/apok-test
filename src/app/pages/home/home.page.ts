@@ -15,6 +15,7 @@ import { Node } from 'src/app/store/node/node.state';
 export class HomePage {
 
   public parentNodes: Node[];
+  private refreshEvent: any;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -24,13 +25,20 @@ export class HomePage {
 
   ionViewWillEnter(){
     this.store.dispatch(loadParentNodesList());
-    this.store.select('node').pipe(takeUntil(this.unsubscribe$)).subscribe( node  => {
+    this.store.select('node').pipe(takeUntil(this.unsubscribe$)).subscribe( node => {
       this.parentNodes = node.nodesList;
     });
   }
 
   async showChildren(parentNodeId: string) {
     this.router.navigate(['/children-list', parentNodeId]);
+  }
+
+  handleRefresh(event: any) {
+    this.store.dispatch(loadParentNodesList());
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
   }
 
 }

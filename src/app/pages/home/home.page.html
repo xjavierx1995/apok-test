@@ -10,13 +10,21 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  
-  <ion-list>
-    @for (item of parentNodes; track item.id) { 
-      <ion-item detail="true" button (click)="showChildren(item.id)">
-        <ion-label>{{ item.title }}</ion-label>
-      </ion-item>
-    }
-  </ion-list>
- 
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  @if (!parentNodes || parentNodes.length === 0) {
+    <ion-item color="light">
+      <ion-label>Arrastre hacia abajo para recargar</ion-label>
+      <ion-icon name="arrow-down" slot="end"></ion-icon>
+    </ion-item>
+  } @else {
+    <ion-list>
+      @for (item of parentNodes; track item.id) { 
+        <ion-item detail="true" button (click)="showChildren(item.id)">
+          <ion-label>{{ item.title }}</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  }
 </ion-content>
