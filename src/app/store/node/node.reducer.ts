@@ -13,6 +13,7 @@ export const nodeReducer = createReducer(initialState,
   on(NodeActions.setNodesList, (state, action) => ({ ...state, nodesList: action.nodes })),
   on(NodeActions.setSelectedParentId, (state, action) => ({ ...state, selectedParentId: action.id })),
   on(NodeActions.setSelectedNode, (state, action) => ({ ...state, selectedNode: action.node })),
+  on(NodeActions.loadNodesList, (state, action) => ({ ...state, nodesList: initialState.nodesList })),
   on(NodeActions.deleteNodeResult, (state, action) => {
     if (action.success) {
       return {

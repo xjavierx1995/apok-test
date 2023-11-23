@@ -92,7 +92,7 @@ export class NodeEffects {
   ));
 
 
-  getPrivateGroupDetailOk$ = createEffect((): any => this.actions$.pipe(
+  loadNodesListError$ = createEffect((): any => this.actions$.pipe(
     ofType(NodeActions.loadNodesListError),
     map(async (e) => {
       let message = 'Ha ocurrido un error';
