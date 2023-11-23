@@ -37,6 +37,7 @@ import { Node } from 'src/app/store/node/node.state';
               label="Nodo padre"
               labelPlacement="stacked"
               type="text"
+              readonly="true"
               [value]="selectedNode.translation[0]?.title ?? selectedNode.title"
             ></ion-input>
           </ion-item>
