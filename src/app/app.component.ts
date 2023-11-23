@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { NodeService } from './services/node.service';
+import { Store } from '@ngrx/store';
+import { setLocalesList } from './store/locale/locale.action';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +10,18 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(
+    private router: Router,
+    private nodeService: NodeService,
+    private store: Store
+    ) {
+    this.initApp();
+  }
+
+  initApp(){
+    this.nodeService.getLocales().subscribe(locales => {
+      this.store.dispatch(setLocalesList({ locales }));
+    });
+    this.router.navigate(['/home']);
+  }
 }
