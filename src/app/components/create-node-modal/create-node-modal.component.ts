@@ -74,12 +74,10 @@ export class CreateNodeModalComponent  implements OnInit {
 
   cancel() {
     this.openModal = false;
-    // this.modal.dismiss(null, 'cancel');
   }
 
   confirm() {
     this.store.dispatch(createNode({ locales: this.selectedLocale }));
-    // this.modal.dismiss(null, 'confirm');
     this.openModal = false;
   }
 }

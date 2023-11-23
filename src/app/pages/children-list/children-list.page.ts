@@ -17,7 +17,9 @@ export class ChildrenListPage implements OnInit, OnDestroy {
 
   public nodeList: Node[];
   public selectedParentNode: Node;
+  public isLoading: boolean;
   private unsubscribe$ = new Subject<void>();
+  private unsubscribeLoading$ = new Subject<void>();
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -26,15 +28,20 @@ export class ChildrenListPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.store.select('node').pipe(takeUntil(this.unsubscribe$)).subscribe( node => {
+    this.store.select('node').pipe(takeUntil(this.unsubscribe$)).subscribe( node => {      
       this.nodeList = node.nodesList;
       this.selectedParentNode = node.selectedNode;
+    });
+    this.store.select('loading').pipe(takeUntil(this.unsubscribeLoading$)).subscribe( loading => {
+      this.isLoading = loading.isLoading;
     });
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.unsubscribeLoading$.next();
+    this.unsubscribeLoading$.complete();
   }
 
   ionViewWillEnter(){
