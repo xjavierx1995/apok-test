@@ -3,7 +3,7 @@ Test made with ionic/Angular
 
 ## Demo
 
-https://cosmic-sherbet-312e8d.netlify.app/
+https://hilarious-faloodeh-7397fc.netlify.app/
 
 ### Installation and configuration
 
