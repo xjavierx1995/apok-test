@@ -22,6 +22,6 @@ export class AppComponent {
     this.nodeService.getLocales().subscribe(locales => {
       this.store.dispatch(setLocalesList({ locales }));
     });
-    this.router.navigate(['/home']);
+    this.router.navigate(['']);
   }
 }

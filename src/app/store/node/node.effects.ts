@@ -101,7 +101,7 @@ export class NodeEffects {
         message = 'El nodo no posee hijos';
       }
       if (e.error.status === 429) {
-        await this.router.navigate(['/home']);
+        await this.router.navigate(['']);
         message = 'Ha ocurrido un error, se ha excedido el limite de peticiones.';
       }
       const toast = await this.toastController.create({
